@@ -12,6 +12,7 @@ export async function getUserData(uuid: string){
     const user_collection = db.collection<User>("user");
 
     const existingUser = await user_collection.findOne({uuid: uuid})
+
     if (existingUser) {
         return existingUser
     } else {
@@ -23,8 +24,13 @@ export async function addUserData(uuid:string, metadata:NextRequest) {
     const client = new MongoClient(uri);
     const db = client.db("prototype")
     const user_collection = db.collection<User>("user");
+    await user_collection.createIndex({uuid: 1}, {unique: true})
 
-    var new_user:User = {uuid: uuid, token: 5, metadata: metadata}
-    user_collection.insertOne(new_user)
+    var new_user:User = {
+        uuid: uuid, token: 5,
+        metadata: null
+    }
+
+    await user_collection.insertOne(new_user)
     return new_user
 }
