@@ -13,9 +13,11 @@ export async function getUserData(uuid: string){
     const user_collection = db.collection<User>("user");
 
     const existingUser = await user_collection.findOne({uuid: uuid})
+    await client.close()
 
     if (existingUser) {
         return existingUser
+        
     } else {
         throw new DataNotFoundError("no user found")
     }
@@ -43,5 +45,8 @@ export async function addUserData(uuid:string, request:NextRequest) {
     }
 
     await user_collection.insertOne(new_user)
-    return new_user
+    .then(async () => {
+        await client.close()
+    })
+    return new_user 
 }
