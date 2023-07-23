@@ -1,17 +1,22 @@
 import { addUserData, getUserData } from '@/lib/data/user'
+import { MongoError } from 'mongodb'
 import { NextRequest, NextResponse } from 'next/server'
  
 export async function POST(request: NextRequest) {
   const formdata = await request.formData()
   const uuid = formdata.get("uuid")
   if (!uuid ) {
-    return NextResponse.json({ message: 'Validation error' }, { status: 403 })
+    return NextResponse.json({ message: 'Validation error' }, { status: 422 })
   }
   try{
     const new_user = await addUserData(uuid.toString(), request)
     return NextResponse.json({message: 'User created succefully'}, {status: 201})
   } catch (err:any) {
-    if( err instanceof Error){ 
+    if (err instanceof MongoError){
+      if(err.code == 11000){
+        return NextResponse.json({message:"User already exist"}, {status: 409})
+      }
+    } else if( err instanceof Error ){ 
       if(process.env.NODE_ENV == "development") {
         return NextResponse.json(
           {
@@ -39,8 +44,9 @@ export async function POST(request: NextRequest) {
             status: 500
           }
         )
+      } else {
+        return NextResponse.json({message: err.message}, {status: 500})
       }
-      return NextResponse.json({message: err.message}, {status: 500})
     }
     return NextResponse.json({message: "Something went wrong"}, {status: 500})
   }

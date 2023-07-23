@@ -4,8 +4,8 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
  
 export default function Profile() {
-  const [data, setData] = useState(Object)
-  const [isLoading, setLoading] = useState(false)
+    const [data, setData] = useState(Object)
+    const [isLoading, setLoading] = useState(false)
 
 
     const setFp = async () => {
@@ -25,7 +25,7 @@ export default function Profile() {
         })
         .then((res) => res.json())
         .then((data) => {
-            setData(data)
+            setData(id)
             console.log(data)
             setLoading(false)
         })
@@ -33,23 +33,28 @@ export default function Profile() {
             console.warn(error);
         });
     }
- 
-    useEffect(() => {
-        setLoading(true);
 
-        setFp()
-        .then((id) => {
-            sendForm(id)
-        })
-    }, [])
+  useEffect(() => {
+      setLoading(true);
+
+      setFp()
+      .then((id) => {
+          sendForm(id)
+      })
+  }, [])
  
-  if (isLoading) return <p>Loading...</p>
+  if (isLoading) return <div className="h-screen">
+      <div className="flex justify-center items-center h-full">
+          <img className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
+      </div>
+  </div>
+  
   if (!data) return <p>No profile data</p>
  
   return (
-    <div>
-      <h1>Done!</h1>
-      <p>{data.toString()}</p>
-    </div>
+      <div className='flex flex-col justify-center items-center h-full'>
+          <h1>Done!</h1>
+          <p>your user id: {data.toString()}</p>
+      </div>
   )
 }
