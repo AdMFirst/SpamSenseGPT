@@ -1,7 +1,8 @@
 import DataNotFoundError from "../exceptions/data-not-found-error";
 import { MongoClient } from "mongodb";
 import User from "./models/user";
-import { NextRequest } from "next/server";
+import { NextRequest, userAgent } from "next/server";
+import RequestMetadata from "./models/request-metadata";
 
 
 const uri = process.env.MONGODB_CONNECTION_STRING || "";
@@ -20,15 +21,25 @@ export async function getUserData(uuid: string){
     }
 }
 
-export async function addUserData(uuid:string, metadata:NextRequest) {
+export async function addUserData(uuid:string, request:NextRequest) {
     const client = new MongoClient(uri);
     const db = client.db("prototype")
     const user_collection = db.collection<User>("user");
     await user_collection.createIndex({uuid: 1}, {unique: true})
 
+    const time = Date.now().toLocaleString();
+
+    const logData: RequestMetadata = {
+        time: time,
+        url: request.nextUrl,
+        ip: request.ip,
+        ua: userAgent(request),
+        geo: request.geo
+    };
+
     var new_user:User = {
         uuid: uuid, token: 5,
-        metadata: null
+        metadata: logData
     }
 
     await user_collection.insertOne(new_user)

@@ -1,6 +1,6 @@
 import { NextURL } from "next/dist/server/web/next-url"
 
-export default interface Log {
+export default interface RequestMetadata {
     time: String,
     url: NextURL
     ip: String | null | undefined,

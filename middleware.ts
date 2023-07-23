@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
-import Log from "@/lib/log/models/log";
-import { write } from "@/lib/log/log"
+import RequestMetadata from "@/lib/data/models/request-metadata";
 
 export default async function middleware(request: NextRequest) {
     const response = NextResponse.next();
 
     const time = Date.now().toLocaleString();
 
-    const logData: Log = {
+    const logData: RequestMetadata = {
         time: time,
         url: request.nextUrl,
         ip: request.ip,

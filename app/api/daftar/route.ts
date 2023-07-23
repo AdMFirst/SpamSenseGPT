@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   }
   try{
     const new_user = await addUserData(uuid.toString(), request)
-    return NextResponse.json({message: 'User created succefully', user: new_user}, {status: 201})
+    return NextResponse.json({message: 'User created succefully'}, {status: 201})
   } catch (err:any) {
     if( err instanceof Error){ 
       if(process.env.NODE_ENV == "development") {
