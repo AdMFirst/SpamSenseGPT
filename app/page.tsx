@@ -5,7 +5,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
  
 export default function Profile() {
     const [data, setData] = useState(Object)
-    const [isLoading, setLoading] = useState(false)
+    const [isLoading, setLoading] = useState(true)
 
 
     const setFp = async () => {
@@ -23,7 +23,13 @@ export default function Profile() {
             headers: {"Content-type": "application/x-www-form-urlencoded"},
             body: formData.toString()
         })
-        .then((res) => res.json())
+        .then(async (res) => {
+            var result = await res.text();
+            if(res.status != 201){
+                alert(result)
+            }
+            return JSON.parse(result)
+        })
         .then((data) => {
             setData(id)
             console.log(data)
