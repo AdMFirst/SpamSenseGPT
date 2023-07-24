@@ -25,7 +25,7 @@ export default function Profile() {
         })
         .then(async (res) => {
             var result = await res.text();
-            if(res.status != 201){
+            if(res.status != 201 && res.status != 409){
                 alert(result)
             }
             return JSON.parse(result)
