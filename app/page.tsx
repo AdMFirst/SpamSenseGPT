@@ -26,7 +26,7 @@ export default function Profile() {
         .then(async (res) => {
             var result = await res.text();
             if(res.status != 201){
-                alert(result)
+                throw result
             }
             return JSON.parse(result)
         })
@@ -37,6 +37,7 @@ export default function Profile() {
         })
         .catch((error) => {
             console.warn(error);
+            alert(error)
         });
     }
 
