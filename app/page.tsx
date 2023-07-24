@@ -5,7 +5,7 @@ import FingerprintJS from '@fingerprintjs/fingerprintjs';
  
 export default function Profile() {
     const [data, setData] = useState(Object)
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false)
 
 
     const setFp = async () => {
