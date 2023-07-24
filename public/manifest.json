@@ -1,12 +1,11 @@
 {
-    "theme_color": "#9013fe",
-    "background_color": "#9013fe",
+    "theme_color": "#5FCFFF",
+    "background_color": "#5FCFFF",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "Next JS Test App For PWA",
-    "short_name": "Test App",
-    "description": "Test app",
+    "name": "Spam Sense GPT",
+    "short_name": "Spam Sense GPT",
     "icons": [
         {
             "src": "/icon-192x192.png",
