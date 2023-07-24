@@ -6,10 +6,11 @@ import RequestMetadata from "./models/request-metadata";
 
 
 const uri = process.env.MONGODB_CONNECTION_STRING || "";
+const MONGODB_DATABASE_NAME = process.env.MONGODB_DATABASE_NAME || "prototype";
 
 export async function getUserData(uuid: string){
     const client = new MongoClient(uri);
-    const db = client.db("prototype")
+    const db = client.db(MONGODB_DATABASE_NAME)
     const user_collection = db.collection<User>("user");
 
     const existingUser = await user_collection.findOne({uuid: uuid})
@@ -25,7 +26,7 @@ export async function getUserData(uuid: string){
 
 export async function addUserData(uuid:string, request:NextRequest) {
     const client = new MongoClient(uri);
-    const db = client.db("prototype")
+    const db = client.db(MONGODB_DATABASE_NAME)
     const user_collection = db.collection<User>("user");
     await user_collection.createIndex({uuid: 1}, {unique: true})
 
