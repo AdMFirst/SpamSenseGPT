@@ -26,7 +26,7 @@ export default function Profile() {
         .then(async (res) => {
             var result = await res.text();
             if(res.status != 201 && res.status != 409){
-                alert(result)
+                throw result
             }
             return JSON.parse(result)
         })
@@ -37,31 +37,41 @@ export default function Profile() {
         })
         .catch((error) => {
             console.warn(error);
-            alert(error)
+            setLoading(false)
+            try {
+                var errorJson = JSON.parse(error);
+                if(errorJson.message){
+                    alert(errorJson.message);
+                } else {
+                    throw "";
+                }
+            } catch {
+                alert(error);
+            }
         });
     }
 
-  useEffect(() => {
-      setLoading(true);
+    useEffect(() => {
+        setLoading(true);
 
-      setFp()
-      .then((id) => {
-          sendForm(id)
-      })
-  }, [])
+        setFp()
+        .then((id) => {
+            sendForm(id)
+        })
+    }, [])
  
-  if (isLoading) return <div className="h-screen">
-      <div className="flex justify-center items-center h-full">
-          <img className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
-      </div>
-  </div>
-  
-  if (!data) return <p>No profile data</p>
- 
-  return (
-      <div className='flex flex-col justify-center items-center h-full'>
-          <h1>Done!</h1>
-          <p>your user id: {data.toString()}</p>
-      </div>
-  )
+    if (isLoading) return <div className="h-screen">
+        <div className="flex justify-center items-center h-full">
+            <img className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
+        </div>
+    </div>
+    
+    if (!data) return <p>No profile data</p>
+    
+    return (
+        <div className='flex flex-col justify-center items-center h-full'>
+            <h1>Done!</h1>
+            <p>your user id: {data.toString()}</p>
+        </div>
+    )
 }

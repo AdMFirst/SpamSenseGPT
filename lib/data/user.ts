@@ -30,7 +30,7 @@ export async function addUserData(uuid:string, request:NextRequest) {
     const user_collection = db.collection<User>("user");
     await user_collection.createIndex({uuid: 1}, {unique: true})
 
-    const time = Date.now().toLocaleString();
+    const time = (new Date()).toLocaleString();
 
     const logData: RequestMetadata = {
         time: time,
