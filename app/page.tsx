@@ -63,7 +63,7 @@ export default function Profile() {
  
     if (isLoading) return <div className="h-screen">
         <div className="flex justify-center items-center h-full">
-            <Image className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
+            <img className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
         </div>
     </div>
     
