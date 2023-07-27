@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import Image from 'next/image';
 
  
 export default function Profile() {
@@ -62,7 +63,7 @@ export default function Profile() {
  
     if (isLoading) return <div className="h-screen">
         <div className="flex justify-center items-center h-full">
-            <img className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
+            <Image className="h-16 w-16" src="https://i.gifer.com/ZKZg.gif" alt="" />
         </div>
     </div>
     
