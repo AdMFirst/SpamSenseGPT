@@ -18,7 +18,6 @@ export async function getUserData(uuid: string){
 
     if (existingUser) {
         return existingUser
-        
     } else {
         throw new DataNotFoundError("no user found")
     }
@@ -50,4 +49,12 @@ export async function addUserData(uuid:string, request:NextRequest) {
         await client.close()
     })
     return new_user 
+}
+
+export async function reduceToken(user: User) {
+    const client = new MongoClient(uri);
+    const db = client.db(MONGODB_DATABASE_NAME)
+    const user_collection = db.collection<User>("user");
+
+    //user_collection.updateOne()
 }
