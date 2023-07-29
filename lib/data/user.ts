@@ -1,5 +1,5 @@
 import DataNotFoundError from "../exceptions/data-not-found-error";
-import { MongoClient } from "mongodb";
+import { MongoClient, MongoError } from "mongodb";
 import User from "./models/user";
 import { NextRequest, userAgent } from "next/server";
 import RequestMetadata from "./models/request-metadata";
@@ -56,5 +56,11 @@ export async function reduceToken(user: User) {
     const db = client.db(MONGODB_DATABASE_NAME)
     const user_collection = db.collection<User>("user");
 
-    //user_collection.updateOne()
+    if (user.token < 1){
+        throw new MongoError("token limit reached")
+    }
+    return await user_collection.updateOne(
+        { uuid: user.uuid },
+        { '$set': { token: (user.token - 1)}}
+    );
 }

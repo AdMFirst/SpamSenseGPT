@@ -3,6 +3,6 @@ import RequestMetadata from "./request-metadata";
 
 export default interface User {
     uuid:string,
-    token: Number,
+    token: number,
     metadata: RequestMetadata | null
 }
