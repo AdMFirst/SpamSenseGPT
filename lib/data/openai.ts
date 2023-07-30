@@ -21,7 +21,7 @@ export async function createResponse(isiPesan: string) {
     console.log((new Date()).toISOString()+" - called openai api")
     const pesan = JSON.stringify(scaffold(isiPesan));
     const chatCompletion = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4",
         messages: [{role: "user", content: pesan}],
     });
 

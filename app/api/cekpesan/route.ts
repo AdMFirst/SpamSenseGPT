@@ -14,6 +14,7 @@ export async function POST(req: NextRequest){
             pesan: "string", uuid: "string"
         } }, { status: 422 })
     }
+    console.log("isi pesan: "+isiPesan)
 
     try {
         var user:User = await getUserData(uuid.toString());
