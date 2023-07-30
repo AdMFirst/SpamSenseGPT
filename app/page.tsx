@@ -3,6 +3,8 @@ import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import Image from 'next/image';
 import { ScaleLoader, BarLoader } from 'react-spinners';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 
  
@@ -11,7 +13,7 @@ export default function Profile() {
     const [isLoading, setLoading] = useState(false)
     const [isPesanLoading, setPesanLoading] = useState(false);
     const [isiBoxPesan, setIsiBoxPesan] = useState('');
-    const [hasilGPT, setHasilGPT] = useState(null)
+    const [hasilGPT, setHasilGPT] = useState(Object);
 
 
     const setFp = async () => {
@@ -59,6 +61,44 @@ export default function Profile() {
         });
     }
 
+    const displayGPTResult = () => {
+        if (hasilGPT !== null){
+            var borderClass = 'flex-shrink-1 p-4 border-4 rounded-lg ';
+            var pathColor = 'rgb(107 114 128)'
+            if (hasilGPT.probability >= 0 && hasilGPT.probability < 30){
+                borderClass = borderClass + "border-green-500";
+                pathColor = 'rgb(34 197 94)'
+            } else if (hasilGPT.probability >= 30 && hasilGPT.probability < 60) {
+                borderClass = borderClass + "border-yellow-500";
+                pathColor = 'rgb(234 179 8)'
+            } else if (hasilGPT.probability >= 60) {
+                borderClass = borderClass + "border-red-500";
+                pathColor = 'rgb(239 68 68)'
+            } else {
+                borderClass = borderClass + "border-gray-500";
+            }
+            return <div className='flex p-4'>
+                <div className={borderClass}>
+                    <p>
+                        {hasilGPT.reasoning}
+                    </p>
+                </div>
+                <div className='flex-shrink-1 p-4'>
+                    <CircularProgressbar 
+                        value={hasilGPT.probability} 
+                        text={`${hasilGPT.probability}%`} 
+                        styles={buildStyles({
+                            pathColor: pathColor,
+                            textColor: '#000000'
+                        })}
+                    />
+                </div>
+            </div>
+        } else {
+            return <></>
+        }
+    }
+
     const handleChangeBoxPesan = (e:ChangeEvent<HTMLTextAreaElement>) => {
         setIsiBoxPesan(e.target.value);
     }
@@ -92,7 +132,8 @@ export default function Profile() {
         })
         .then((jsonBody) => {
             console.log(jsonBody);
-            setHasilGPT(jsonBody);
+            setHasilGPT(jsonBody.payload);
+            setData(jsonBody.user)
             setPesanLoading(false)
         })
         .catch((error) => {
@@ -104,6 +145,7 @@ export default function Profile() {
 
     useEffect(() => {
         setLoading(true);
+        setHasilGPT(null);
         const localUUID = sessionStorage.getItem("userid");
         
         if (localUUID){
@@ -152,7 +194,7 @@ export default function Profile() {
             <button className="btn btn-blue" onClick={()=>{setPesanLoading(!isPesanLoading)}} >reset loading</button>
             <BarLoader color="#36d7b7" loading={isPesanLoading} cssOverride={{width:'80%'}} />
             
-
+            {displayGPTResult()}
             <p>your user id: {data.uuid}</p>
         </div>
     )
