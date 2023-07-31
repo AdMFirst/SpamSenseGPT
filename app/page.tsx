@@ -147,11 +147,10 @@ export default function Profile() {
             setData(jsonBody.user)
             setPesanLoading(false)
         })
-        .catch(async(error) => {
+        .catch((error) => {
             console.error(error);
             setPesanLoading(false)
-            await error
-            setErrorAlert({on:true, error:JSON.stringify(error)})
+            setErrorAlert({on:true, error:error.payload })
         })
         
     }
