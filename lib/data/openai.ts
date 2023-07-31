@@ -8,7 +8,7 @@ const openai = new OpenAIApi(configuration);
 
 function scaffold(pesan: string) {
     return {
-        "command":"From 0-100, rate this message for possibilty of being a spam email with 100 is spam, and 0 is safe. Send your response with the provided schema",
+        "command":"From 0-100, rate this message for possibilty of being a spam message with 100 is spam, and 0 is safe. Send your response with the provided schema",
         "message":pesan,
         "response_schema":{
             "probability":"int",

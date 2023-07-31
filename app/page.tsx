@@ -14,6 +14,7 @@ export default function Profile() {
     const [isPesanLoading, setPesanLoading] = useState(false);
     const [isiBoxPesan, setIsiBoxPesan] = useState('');
     const [hasilGPT, setHasilGPT] = useState(Object);
+    const [maxLength, setMaxLenght] = useState(500)
 
 
     const setFp = async () => {
@@ -100,12 +101,16 @@ export default function Profile() {
     }
 
     const handleChangeBoxPesan = (e:ChangeEvent<HTMLTextAreaElement>) => {
-        setIsiBoxPesan(e.target.value);
+        const inputText = e.target.value;
+        if (inputText.length <= maxLength) {
+            setIsiBoxPesan(e.target.value);
+        }
+        
     }
 
     const handleClickPasteButton = async () => {
         try {
-            const clipboardText = await navigator.clipboard.readText();
+            const clipboardText = (await navigator.clipboard.readText()).slice(0, maxLength);
             setIsiBoxPesan(clipboardText);
         } catch (error) {
             console.error('Failed to read clipboard data:', error);
@@ -173,11 +178,14 @@ export default function Profile() {
             </div>
             <div id="frame4-form" className='py-2 px-4'>
                 <form onSubmit={handleSubmit}>
-                    <div>
+                    <div className='relative'>
+                        <div className='absolute bottom-0 right-0'>
+                            <p className='p-2 select-none text-gray-400'>{isiBoxPesan.length}/{maxLength}</p>
+                        </div>
                         <textarea
                             value={isiBoxPesan}
                             onChange={handleChangeBoxPesan}
-                            maxLength={500}
+                            maxLength={maxLength}
                             rows={10}
                             cols={100}
                             name='pesan'
@@ -190,13 +198,13 @@ export default function Profile() {
                     </div>
                     <div className='pt-4 flex flex-row justify-center items-center'>
                         <button type="button" onClick={()=> {setIsiBoxPesan('')}} className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                            Clear
+                            Bersihkan
                         </button>
                         <button type="button" onClick={handleClickPasteButton} className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                            Paste
+                            Tempel
                         </button>
                         <button type='submit' className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                            Submit <br/>
+                            Deteksi
                         </button>
                     </div>
                     <div className='pt-1 flex flex-row justify-center items-center'>
@@ -209,7 +217,7 @@ export default function Profile() {
             </div>
             {displayGPTResult()}
             <div id='Footer'>
-                <p>your user id: {data.uuid}</p>
+                <p>id pengguna anda: {data.uuid}</p>
             </div>
             
         </div>
