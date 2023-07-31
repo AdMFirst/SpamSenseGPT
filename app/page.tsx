@@ -150,7 +150,7 @@ export default function Profile() {
         .catch((error) => {
             console.error(error);
             setPesanLoading(false)
-            setErrorAlert({on:true, error:error.toString()})
+            setErrorAlert({on:true, error:JSON.stringify(error)})
         })
         
     }
