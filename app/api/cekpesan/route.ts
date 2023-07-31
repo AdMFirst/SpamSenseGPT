@@ -33,6 +33,7 @@ export async function POST(req: NextRequest){
         if (error instanceof DataNotFoundError) {
             return NextResponse.json({message: 'error', payload: error.message}, {status: 404})   
         }
-        return NextResponse.json({message: 'error', payload: error}, {status: 500})   
+        
+        return NextResponse.json({message: 'error'}, {status: 500})   
     }
 }

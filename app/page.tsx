@@ -139,7 +139,7 @@ export default function Profile() {
             if (!response.ok){
                 throw response.text()
             }
-            return await response.json()
+            return ( await response.json() )
         })
         .then((jsonBody) => {
             console.log(jsonBody);
@@ -148,9 +148,10 @@ export default function Profile() {
             setPesanLoading(false)
         })
         .catch((error) => {
+            //var errorObject = JSON.parse(error);
             console.error(error);
             setPesanLoading(false)
-            setErrorAlert({on:true, error:error.payload })
+            setErrorAlert({on:true, error:error.message })
         })
         
     }
