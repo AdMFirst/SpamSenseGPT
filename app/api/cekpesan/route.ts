@@ -34,6 +34,6 @@ export async function POST(req: NextRequest){
             return NextResponse.json({message: 'error', payload: error.message}, {status: 404})   
         }
         
-        return NextResponse.json({message: 'error'}, {status: 500})   
+        return NextResponse.json({message: 'Something went wrong'}, {status: 500})   
     }
 }
