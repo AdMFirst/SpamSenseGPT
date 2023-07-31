@@ -1,10 +1,14 @@
 "use client"
-import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useState, useEffect, FormEvent, ChangeEvent, useCallback } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import Image from 'next/image';
 import { ScaleLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+
+import Particles from "react-tsparticles";
+import type { Container, Engine } from "tsparticles-engine";
+import { loadSlim } from "tsparticles-slim";
 
 
  
@@ -162,6 +166,20 @@ export default function Profile() {
             })
         }
     }, [])
+
+    const particlesInit = useCallback(async (engine: Engine) => {
+        console.log(engine);
+
+        // you can initialize the tsParticles instance (engine) here, adding custom shapes or presets
+        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
+        // starting from v2 you can add only the features you need reducing the bundle size
+        //await loadFull(engine);
+        await loadSlim(engine);
+    }, []);
+
+    const particlesLoaded = useCallback(async (container: Container | undefined) => {
+        await console.log(container);
+    }, []);
  
     if (isLoading) return <div className="h-screen">
         <div className="flex justify-center items-center h-full">
@@ -172,53 +190,58 @@ export default function Profile() {
     if (!data) return <p>No profile data</p>
     
     return (
-        <div className='flex flex-col justify-center items-center'>
-            <div id="title" className='pb-2 pt-6 px-4'>
-                <h1>Deteksi Pesan Spam Dengan Teknologi AI</h1>
-            </div>
-            <div id="frame4-form" className='py-2 px-4'>
-                <form onSubmit={handleSubmit}>
-                    <div className='relative'>
-                        <div className='absolute bottom-0 right-0'>
-                            <p className='p-2 select-none text-gray-400'>{isiBoxPesan.length}/{maxLength}</p>
+        <div>   
+            <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>
+
+            <main className='relative z-10 flex flex-col justify-center items-center'>
+                <div id="title" className='pb-2 pt-6 px-4'>
+                    <h1>Deteksi Pesan Spam Dengan Teknologi AI</h1>
+                </div>
+                <div id="frame4-form" className='py-2 px-4'>
+                    <form onSubmit={handleSubmit}>
+                        <div className='relative'>
+                            <div className='absolute bottom-0 right-0'>
+                                <p className='p-2 select-none text-gray-400'>{isiBoxPesan.length}/{maxLength}</p>
+                            </div>
+                            <textarea
+                                value={isiBoxPesan}
+                                onChange={handleChangeBoxPesan}
+                                maxLength={maxLength}
+                                rows={10}
+                                cols={100}
+                                name='pesan'
+                                id="pesan"
+                                className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-400 focus:border-blue-500"
+                                placeholder='Ketik atau tempel pesan anda disini untuk mulai mendeteksi pesan anda'
+                                required
+                            />
+                            <input type="hidden" name="uuid" id="uuid" value={data.uuid} />
                         </div>
-                        <textarea
-                            value={isiBoxPesan}
-                            onChange={handleChangeBoxPesan}
-                            maxLength={maxLength}
-                            rows={10}
-                            cols={100}
-                            name='pesan'
-                            id="pesan"
-                            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-400 focus:border-blue-500"
-                            placeholder='Ketik atau tempel pesan anda disini untuk mulai mendeteksi pesan anda'
-                            required
-                        />
-                        <input type="hidden" name="uuid" id="uuid" value={data.uuid} />
-                    </div>
-                    <div className='pt-4 flex flex-row justify-center items-center'>
-                        <button type="button" onClick={()=> {setIsiBoxPesan('')}} className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                            Bersihkan
-                        </button>
-                        <button type="button" onClick={handleClickPasteButton} className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                            Tempel
-                        </button>
-                        <button type='submit' className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                            Deteksi
-                        </button>
-                    </div>
-                    <div className='pt-1 flex flex-row justify-center items-center'>
-                        <p className='text-gray-400'>Token tersisa: {data.token} </p>
-                    </div>
-                </form>
-            </div>
-            <div id="loading bar" className='w-[75%]'>
-                <BarLoader color="#5FCFFF" loading={isPesanLoading} cssOverride={{width:'100%'}} />
-            </div>
-            {displayGPTResult()}
-            <div id='Footer'>
-                <p>id pengguna anda: {data.uuid}</p>
-            </div>
+                        <div className='pt-4 flex flex-row justify-center items-center'>
+                            <button type="button" onClick={()=> {setIsiBoxPesan('')}} className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Bersihkan
+                            </button>
+                            <button type="button" onClick={handleClickPasteButton} className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Tempel
+                            </button>
+                            <button type='submit' className="mx-2 bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Deteksi
+                            </button>
+                        </div>
+                        <div className='pt-1 flex flex-row justify-center items-center'>
+                            <p className='text-gray-400'>Token tersisa: {data.token} </p>
+                        </div>
+                    </form>
+                </div>
+                <div id="loading bar" className='w-[75%]'>
+                    <BarLoader color="#5FCFFF" loading={isPesanLoading} cssOverride={{width:'100%'}} />
+                </div>
+                {displayGPTResult()}
+                <div id='Footer'>
+                    <p>id pengguna anda: {data.uuid}</p>
+                </div>
+                
+            </main>
             
         </div>
     )
