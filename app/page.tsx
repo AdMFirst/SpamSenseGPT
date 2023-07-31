@@ -6,7 +6,7 @@ import { ScaleLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import Particles from "react-particles";
+import Particles from "react-tsparticles";
 import type { Container, Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
 
@@ -19,6 +19,33 @@ export default function Profile() {
     const [isiBoxPesan, setIsiBoxPesan] = useState('');
     const [hasilGPT, setHasilGPT] = useState(Object);
     const [maxLength, setMaxLenght] = useState(500)
+    var option = {
+        "particles": {
+            "number": {
+                "value": 50
+            },
+            "color":"#D3D3D3",
+            "links": {
+                "distance": 125,
+                "color":"#666661",
+                "enable": true,
+                "triangles": {
+                    "enable": true,
+                    "opacity": 0.1
+                }
+            },
+            "move": {
+                "enable": true,
+                "speed": 1
+            },
+            "size": {
+                "value": 2
+            },
+            "shape": {
+                "type": "circle"
+            }
+        }
+    }
 
 
     const setFp = async () => {
@@ -190,8 +217,8 @@ export default function Profile() {
     if (!data) return <p>No profile data</p>
     
     return (
-        <div>   
-            <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>
+        <div> 
+            {process.env.APRILMOP=="true"? <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>:<></>}    
 
             <main className='relative z-10 flex flex-col justify-center items-center'>
                 <div id="title" className='pb-2 pt-6 px-4'>

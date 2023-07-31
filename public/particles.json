@@ -1,65 +1,27 @@
 {
-    "fpsLimit": 60,
     "particles": {
         "number": {
             "value": 50
         },
-        "color": {
-            "value": [
-                "#5bc0eb",
-                "#fde74c",
-                "#9bc53d",
-                "#e55934",
-                "#fa7921"
-            ]
-        },
-        "shape": {
-            "type": "circle"
-        },
-        "opacity": {
-            "value": 0.5
-        },
-        "size": {
-            "value": 400,
-            "random": {
+        "color":"#55bae5",
+        "links": {
+            "distance": 125,
+            "color":"#5FCFFF",
+            "enable": true,
+            "triangles": {
                 "enable": true,
-                "minimumValue": 200
+                "opacity": 0.1
             }
         },
         "move": {
             "enable": true,
-            "speed": 10,
-            "direction": "top",
-            "outMode": "destroy"
-        }
-    },
-    "interactivity": {
-        "detectsOn": "canvas",
-        "events": {
-            "resize": true
-        }
-    },
-    "detectRetina": true,
-    "background": {
-        "color": "#fff",
-        "image": "",
-        "position": "50% 50%",
-        "repeat": "no-repeat",
-        "size": "cover"
-    },
-    "emitters": {
-        "direction": "top",
-        "position": {
-            "x": 50,
-            "y": 120
-        },
-        "rate": {
-            "delay": 0.2,
-            "quantity": 2
+            "speed": 1
         },
         "size": {
-            "width": 100,
-            "height": 0
+            "value": 2
+        },
+        "shape": {
+            "type": "circle"
         }
     }
 }
