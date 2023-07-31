@@ -6,7 +6,7 @@ import { ScaleLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import Particles from "react-tsparticles";
+import Particles from "react-particles";
 import type { Container, Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
 
