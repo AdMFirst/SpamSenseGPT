@@ -10,11 +10,12 @@ export async function POST(request: NextRequest) {
   }
   try{
     const new_user = await addUserData(uuid.toString(), request)
-    return NextResponse.json({message: 'User created succefully'}, {status: 201})
-  } catch (err:any) {
+    return NextResponse.json({message: 'User created succefully', user: new_user}, {status: 201})
+  } catch (err) {
+    console.log(err)
     if (err instanceof MongoError){
       if(err.code == 11000){
-        return NextResponse.json({message:"User already exist"}, {status: 409})
+        return NextResponse.json({message:"User already exist", user: await getUserData(uuid.toString())}, {status: 409})
       }
     } else if( err instanceof Error ){ 
       if(process.env.NODE_ENV == "development") {

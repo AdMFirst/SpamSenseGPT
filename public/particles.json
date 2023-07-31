@@ -1,0 +1,27 @@
+{
+    "particles": {
+        "number": {
+            "value": 50
+        },
+        "color":"#55bae5",
+        "links": {
+            "distance": 125,
+            "color":"#5FCFFF",
+            "enable": true,
+            "triangles": {
+                "enable": true,
+                "opacity": 0.1
+            }
+        },
+        "move": {
+            "enable": true,
+            "speed": 1
+        },
+        "size": {
+            "value": 2
+        },
+        "shape": {
+            "type": "circle"
+        }
+    }
+}
