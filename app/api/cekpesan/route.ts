@@ -19,7 +19,7 @@ export async function POST(req: NextRequest){
     try {
         var user:User = await getUserData(uuid.toString());
         if (user.token < 1 ) {
-            return NextResponse.json({message: 'error', payload: "Token tidak cukup, harap isi ulang token"}, {status: 402})
+            return NextResponse.json({message: 'error, Token tidak cukup, harap isi ulang token'}, {status: 402})
         }
 
         const response = await createResponse(isiPesan.toString());
@@ -31,9 +31,11 @@ export async function POST(req: NextRequest){
     } catch (error) {
         console.log(error);
         if (error instanceof DataNotFoundError) {
-            return NextResponse.json({message: 'error', payload: error.message}, {status: 404})   
+            return NextResponse.json({message: 'error, '+error.message}, {status: 404})   
         }
-        
+        if (error instanceof Error ) {
+            return NextResponse.json({message: 'error, '+error.message}, {status: 500})
+        }
         return NextResponse.json({message: 'Something went wrong'}, {status: 500})   
     }
 }

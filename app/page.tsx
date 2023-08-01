@@ -14,7 +14,7 @@ import { loadSlim } from "tsparticles-slim";
  
 export default function Profile() {
     const [data, setData] = useState(Object)
-    const [isLoading, setLoading] = useState(false)
+    const [isLoading, setLoading] = useState(true)
     const [isPesanLoading, setPesanLoading] = useState(false);
     const [isiBoxPesan, setIsiBoxPesan] = useState('');
     const [hasilGPT, setHasilGPT] = useState(Object);
@@ -38,11 +38,11 @@ export default function Profile() {
             body: formData.toString()
         })
         .then(async (res) => {
-            var result = await res.text();
+            var result = await res.json();
             if(res.status != 201 && res.status != 409){
                 throw result
             }
-            return JSON.parse(result)
+            return result
         })
         .then((data) => {
             setData(data.user);
@@ -54,17 +54,12 @@ export default function Profile() {
             console.warn(error);
             sessionStorage.clear();
             setLoading(false)
-            try {
-                var errorJson = JSON.parse(error);
-                if(errorJson.message){
-                    setErrorAlert({on:true, error:errorJson.message})
 
-                } else {
-                    throw "";
-                }
-            } catch {
-                setErrorAlert({on:true, error:error.toString()})
-            }
+            if(error.message){
+                setErrorAlert({on:true, error:error.message})
+            } else {
+                setErrorAlert({on:true, error:JSON.stringify(error)})
+            }  
         });
     }
 
@@ -137,7 +132,7 @@ export default function Profile() {
         })
         .then(async (response) => {
             if (!response.ok){
-                throw response.text()
+                throw await response.json()
             }
             return ( await response.json() )
         })
@@ -242,7 +237,7 @@ export default function Profile() {
                     {
                         errorAlert.on?
                         (
-                            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                            <div className="m-2 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                                 <strong className="font-bold">OH NO!</strong> <br/>
                                 <span className="block sm:inline">{errorAlert.error}</span>
                                 <span className="absolute top-0 bottom-0 right-0 px-4 py-3" onClick={()=>setErrorAlert({on:false, error:''})}>
