@@ -2,7 +2,7 @@
 import { useState, useEffect, FormEvent, ChangeEvent, useCallback } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import Image from 'next/image';
-import { ScaleLoader, BarLoader } from 'react-spinners';
+import { GridLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -182,7 +182,7 @@ export default function Profile() {
  
     if (isLoading) return <div className="h-screen">
         <div className="flex justify-center items-center h-full">
-            <ScaleLoader color="#5FCFFF"  />
+            <GridLoader size={20} color="#5FCFFF"  />
         </div>
     </div>
     
