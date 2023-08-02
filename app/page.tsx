@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { ScaleLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
+import Link from "next/link";
 import Particles from "react-tsparticles";
 import type { Container, Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
@@ -194,7 +194,8 @@ export default function Profile() {
     if (!data) return <p>No profile data</p>
     
     return (
-        <div> 
+        <div className="bg-white z-50 sticky top-0"> 
+            
             {process.env.APRILMOP=="true"? <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>:<></>}    
 
             <main className='relative z-10 flex flex-col justify-center items-center'>
@@ -256,9 +257,7 @@ export default function Profile() {
                 <div id='Footer'>
                     <p>id pengguna anda: {data.uuid}</p>
                 </div>
-                
             </main>
-            
         </div>
     )
 }
