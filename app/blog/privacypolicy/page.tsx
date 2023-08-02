@@ -57,7 +57,7 @@ export default function TermsOfUse() {
 
                         <p className="mt-2">{"Like any other website, SpamSenseGPT uses \"cookies\". These cookies are used to store information including visitors' preferences, and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information."}</p>
 
-                        <p className="mt-2">For more general information on cookies, please read <a className="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="https://www.privacypolicyonline.com/what-are-cookies/">the "Cookies" article from the Privacy Policy Generator</a>.</p>
+                        <p className="mt-2">For more general information on cookies, please read <a className="font-medium text-blue-600 dark:text-blue-500 hover:underline" href="https://www.privacypolicyonline.com/what-are-cookies/">the {'"Cookies"'} article from the Privacy Policy Generator</a>.</p>
 
                         <h2 className="mt-2">Privacy Policies</h2>
 
