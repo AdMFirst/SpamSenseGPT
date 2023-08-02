@@ -192,7 +192,7 @@ export default function Profile() {
         <div> 
             {process.env.APRILMOP=="true"? <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>:<></>}    
 
-            <main className='relative z-10 flex flex-col justify-center items-center'>
+            <main className='relative flex flex-col justify-center items-center'>
                 <div id="title" className='pb-2 pt-6 px-4'>
                     <h1>Deteksi Pesan Spam Dengan Teknologi AI</h1>
                 </div>
@@ -227,8 +227,9 @@ export default function Profile() {
                                 Deteksi
                             </button>
                         </div>
-                        <div className='pt-1 flex flex-row justify-center items-center'>
+                        <div className='pt-1 flex flex-col justify-center items-center'>
                             <p className='text-gray-400'>Token tersisa: {data.token} </p>
+                            <p className='text-sm text-gray-400'>id pengguna anda: {data.uuid}</p>
                         </div>
                     </form>
                 </div>
@@ -248,9 +249,6 @@ export default function Profile() {
                     }
                 </div>
                 {displayGPTResult()}
-                <div id='Footer'>
-                    <p>id pengguna anda: {data.uuid}</p>
-                </div>
                 
             </main>
             
