@@ -7,8 +7,8 @@ import 'tailwindcss/tailwind.css';
 import HabibNavbar from '@/lib/components/header';
 import HabibFooter from '@/lib/components/footer';
 
-import JahfalNavbar from '@/src/app/components/navbar'
-import JahfalFooter from '@/src/app/components/footer';
+import JahfalNavbar from '@/lib/components/Jnavbar'
+import JahfalFooter from '@/lib/components/Jfooter';
 
 
 
@@ -31,14 +31,14 @@ export default function RootLayout({
         <link rel="manifest" href='/manifest.json'/>
       </head>
       <body className={roboto.className+" h-full"}>
-          <HabibNavbar />
           <JahfalNavbar />
 
-          <main className="flex-1 py-20">
+          
+
+          <main className="flex-1">
             {children}
           </main>
 
-          <HabibFooter />
           <JahfalFooter />
       </body>
     </html>
