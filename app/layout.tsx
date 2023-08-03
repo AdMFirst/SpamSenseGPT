@@ -1,13 +1,16 @@
-import Header from '@/lib/components/header';
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter, Roboto } from 'next/font/google'
 import Script from 'next/script'
 import 'tailwindcss/tailwind.css';
-import Footer from '@/lib/components/footer';
-import Navbar from '@/src/app/components/navbar'
-import Footer from '@/src/app/components/footer';
-import Pricing from '@/src/app/page/pricing';
+
+import HabibNavbar from '@/lib/components/header';
+import HabibFooter from '@/lib/components/footer';
+
+import JahfalNavbar from '@/src/app/components/navbar'
+import JahfalFooter from '@/src/app/components/footer';
+
+
 
 
 const roboto = Roboto({weight:"400", subsets: ['latin']});
@@ -28,14 +31,15 @@ export default function RootLayout({
         <link rel="manifest" href='/manifest.json'/>
       </head>
       <body className={roboto.className+" h-full"}>
-          <Header />
-          <Navbar />
+          <HabibNavbar />
+          <JahfalNavbar />
 
           <main className="flex-1 py-20">
             {children}
           </main>
 
-          <Footer />
+          <HabibFooter />
+          <JahfalFooter />
       </body>
     </html>
   )
