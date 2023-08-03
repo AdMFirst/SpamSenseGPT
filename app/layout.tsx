@@ -1,9 +1,14 @@
-import Header from '@/lib/components/header';
 import './globals.css'
-import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
+import type { Metadata } from 'next'
+import { Inter, Roboto } from 'next/font/google'
+import Script from 'next/script'
 import 'tailwindcss/tailwind.css';
+
+import Navbar from '@/lib/components/navbar'
 import Footer from '@/lib/components/footer';
+
+
+
 
 const roboto = Roboto({weight:"400", subsets: ['latin']});
 
@@ -23,12 +28,10 @@ export default function RootLayout({
         <link rel="manifest" href='/manifest.json'/>
       </head>
       <body className={roboto.className+" h-full"}>
-          <Header />
-
-          <main className="flex-1 py-20">
+          <Navbar />
+          <main className="flex-1">
             {children}
           </main>
-
           <Footer />
       </body>
     </html>
