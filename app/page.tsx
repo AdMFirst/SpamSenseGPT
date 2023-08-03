@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { GridLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
+import Link from "next/link";
 import Particles from "react-tsparticles";
 import type { Container, Engine } from "tsparticles-engine";
 import { loadSlim } from "tsparticles-slim";
@@ -190,9 +190,10 @@ export default function Profile() {
     
     return (
         <div> 
+            
             {process.env.APRILMOP=="true"? <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>:<></>}    
 
-            <main className='relative flex flex-col justify-center items-center'>
+            <main className='relative flex flex-col justify-center items-center mb-16'>
                 <div id="title" className='pb-2 pt-6 px-4'>
                     <h1>Deteksi Pesan Spam Dengan Teknologi AI</h1>
                 </div>
@@ -229,7 +230,7 @@ export default function Profile() {
                         </div>
                         <div className='pt-1 flex flex-col justify-center items-center'>
                             <p className='text-gray-400'>Token tersisa: {data.token} </p>
-                            <p className='text-sm text-gray-400'>id pengguna anda: {data.uuid}</p>
+                            <p className='text-sm text-gray-400 text-center'>id pengguna anda: {data.uuid}</p>
                         </div>
                     </form>
                 </div>
@@ -251,7 +252,6 @@ export default function Profile() {
                 {displayGPTResult()}
                 
             </main>
-            
         </div>
     )
 }
