@@ -4,11 +4,8 @@ import { Inter, Roboto } from 'next/font/google'
 import Script from 'next/script'
 import 'tailwindcss/tailwind.css';
 
-import HabibNavbar from '@/lib/components/header';
-import HabibFooter from '@/lib/components/footer';
-
-import JahfalNavbar from '@/lib/components/Jnavbar'
-import JahfalFooter from '@/lib/components/Jfooter';
+import Navbar from '@/lib/components/navbar'
+import Footer from '@/lib/components/footer';
 
 
 
@@ -31,15 +28,11 @@ export default function RootLayout({
         <link rel="manifest" href='/manifest.json'/>
       </head>
       <body className={roboto.className+" h-full"}>
-          <JahfalNavbar />
-
-          
-
+          <Navbar />
           <main className="flex-1">
             {children}
           </main>
-
-          <JahfalFooter />
+          <Footer />
       </body>
     </html>
   )
