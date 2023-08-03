@@ -13,10 +13,10 @@ const Navbar = () => {
                     <a className="flex title-font font-medium items-center text-gray-900 mb-1 md:mb-0">
                         <h1 className={"text-2xl "+ fontY.className}> SpamSenseGPT</h1>
                     </a>
-                    <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center text-gray-800">
-                        <Link href={"/"} className="mr-5 hover:underline">Home</Link>
-                        <Link href={"/about"} className="mr-5 hover:underline ">About Us</Link>
-                        <Link href={"/pricing"} className="mr-5 hover:underline ">Pricing</Link>
+                    <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center text-gray-800 text-center">
+                        <Link href={"/"} className="mx-2 hover:underline">Home</Link>
+                        <Link href={"/about"} className="mx-2 hover:underline ">About Us</Link>
+                        <Link href={"/pricing"} className="mx-2 hover:underline ">Pricing</Link>
                     </nav>
                 </div>
             </header>
