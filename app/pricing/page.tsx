@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 
 const Pricing = () => {
     return (
-        <div className="bg-gary-100 relative">
+        <div className="bg-gray-100 relative">
             <section className="text-gray-600 body-font overflow-hidden">
                 <div className="container px-5 pb-24 pt-12 mx-auto">
                     <div className="flex flex-col text-center w-full mb-12">
