@@ -79,7 +79,7 @@ const Footer = () => {
                 </div>
                 <div className="bg-gray-100">
                     <div className="container mx-auto py-4 px-5 flex flex-wrap flex-col items-center md:justify center">
-                        <p className="text-gray-500 text-sm text-center">Copyright © SpamSenseGPT All Rights Unknown. 2023</p>
+                        <p className="text-gray-500 text-sm text-center">Copyright © SpamSenseGPT GNU General Public License v3.0</p>
                     </div>
                 </div>
             </footer>
