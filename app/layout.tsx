@@ -6,8 +6,7 @@ import 'tailwindcss/tailwind.css';
 
 import Navbar from '@/lib/components/navbar'
 import Footer from '@/lib/components/footer';
-
-
+import { Analytics } from '@vercel/analytics/react';
 
 
 const roboto = Roboto({weight:"400", subsets: ['latin']});
@@ -32,6 +31,7 @@ export default function RootLayout({
           <main className="flex-1">
             {children}
           </main>
+          <Analytics />
           <Footer />
       </body>
     </html>
