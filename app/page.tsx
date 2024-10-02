@@ -1,14 +1,11 @@
 "use client"
 import { useState, useEffect, FormEvent, ChangeEvent, useCallback } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import Image from 'next/image';
+
 import { GridLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import Link from "next/link";
-import Particles from "react-tsparticles";
-import type { Container, Engine } from "tsparticles-engine";
-import { loadSlim } from "tsparticles-slim";
+
 
 
  
@@ -39,14 +36,14 @@ export default function Profile() {
         })
         .then(async (res) => {
             var result = await res.json();
-            if(res.status != 201 && res.status != 409){
+            if(res.status != 201 && res.status != 200){
                 throw result
             }
             return result
         })
         .then((data) => {
             setData(data.user);
-            console.log(data);
+            //console.log(data);
             sessionStorage.setItem("userid", id);
             setLoading(false);
         })
@@ -122,9 +119,9 @@ export default function Profile() {
         event.preventDefault();
 
         setPesanLoading(true)
-        console.log(event.currentTarget);
+        //console.log(event.currentTarget);
         const formData = new FormData(event.currentTarget)
-        console.log(formData.get('pesan'))
+        //console.log(formData.get('pesan'))
 
         fetch("/api/cekpesan", {
             method: "POST",
@@ -137,7 +134,7 @@ export default function Profile() {
             return ( await response.json() )
         })
         .then((jsonBody) => {
-            console.log(jsonBody);
+            //console.log(jsonBody);
             setHasilGPT(jsonBody.payload);
             setData(jsonBody.user)
             setPesanLoading(false)
@@ -165,20 +162,6 @@ export default function Profile() {
             })
         }
     }, [])
-
-    const particlesInit = useCallback(async (engine: Engine) => {
-        console.log(engine);
-
-        // you can initialize the tsParticles instance (engine) here, adding custom shapes or presets
-        // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-        // starting from v2 you can add only the features you need reducing the bundle size
-        //await loadFull(engine);
-        await loadSlim(engine);
-    }, []);
-
-    const particlesLoaded = useCallback(async (container: Container | undefined) => {
-        await console.log(container);
-    }, []);
  
     if (isLoading) return <div className="h-screen">
         <div className="flex justify-center items-center h-full">
@@ -189,9 +172,7 @@ export default function Profile() {
     if (!data) return <p>No profile data</p>
     
     return (
-        <div> 
-            
-            {process.env.APRILMOP=="true"? <Particles  url='/particles.json' id="tsparticles" init={particlesInit} loaded={particlesLoaded}/>:<></>}    
+        <div>  
 
             <main className='bg-gradient-to-b to-gray-200 from-white relative flex flex-col justify-center items-center pb-16'>
                 <div id="title" className='pb-2 pt-6 px-4'>

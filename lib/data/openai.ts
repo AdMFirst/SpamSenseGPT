@@ -1,31 +1,47 @@
-const { Configuration, OpenAIApi } = require("openai");
+import OpenAI from "openai"
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  basePath: process.env.OPENAI_API_BASE
+  baseURL: process.env.OPENAI_API_BASE,
+  defaultHeaders: {
+    "HTTP-Referer": 'https://spam-sense-gpt.vercel.app', // Optional, for including your app on openrouter.ai rankings.
+  }
 });
-const openai = new OpenAIApi(configuration);
+
+const systemPrompt = {
+    "command" : 'From 0-100, rate the following message for possibilty of \
+    being a spam message with 100 is spam, and 0 is safe. Send your response \
+    with the provided schema. You must only answer using the provided json schema. \
+    You cannot answer without following the response schema. Use the correct language \
+    when responding',
+    "response_schema":{ 
+        "probability":"int", 
+        "reasoning":"str", 
+    },
+    "language": "id" 
+}
+
+
+
 
 function scaffold(pesan: string) {
-    return {
-        "command":"From 0-100, rate this message for possibilty of being a spam message with 100 is spam, and 0 is safe. Send your response with the provided schema",
-        "message":pesan,
-        "response_schema":{
-            "probability":"int",
-            "reasoning":"str",
-        }
-    }
+    return 'help scan this message "'+pesan+'"';
 }
+
 
 export async function createResponse(isiPesan: string) {
     console.log((new Date()).toISOString()+" - called openai api")
-    const pesan = JSON.stringify(scaffold(isiPesan));
-    const chatCompletion = await openai.createChatCompletion({
-        model: 'gpt-3.5-turbo-16k',
-        messages: [{role: "user", content: pesan}],
+
+    const chatCompletion = await openai.chat.completions.create({
+        model: process.env.LLM_MODEL_USED?? "meta-llama/llama-3.2-3b-instruct:free",
+        messages: [
+            {role: 'system', content: JSON.stringify(systemPrompt) },
+            {role: "user", content: scaffold(isiPesan) }
+        ],
     });
 
-    const response = JSON.parse(chatCompletion.data.choices[0].message.content);
+    console.log(chatCompletion.choices[0].message.content!)
+    const response = JSON.parse(chatCompletion.choices[0].message.content!);
 
     return response
 }

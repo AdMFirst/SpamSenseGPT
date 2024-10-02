@@ -1,5 +1,4 @@
 import { addUserData, getUserData } from '@/lib/data/user'
-import { MongoError } from 'mongodb'
 import { NextRequest, NextResponse } from 'next/server'
  
 export async function POST(request: NextRequest) {
@@ -10,14 +9,14 @@ export async function POST(request: NextRequest) {
   }
   try{
     const new_user = await addUserData(uuid.toString(), request)
-    return NextResponse.json({message: 'User created succefully', user: new_user}, {status: 201})
+    if (new_user) {
+      return NextResponse.json({message: 'User created succefully', user: new_user}, {status: 201})
+    } else {
+      return NextResponse.json({message:"User already exist", user: await getUserData(uuid.toString())}, {status: 200})
+    }
   } catch (err) {
     console.log(err)
-    if (err instanceof MongoError){
-      if(err.code == 11000){
-        return NextResponse.json({message:"User already exist", user: await getUserData(uuid.toString())}, {status: 409})
-      }
-    } else if( err instanceof Error ){ 
+    if( err instanceof Error ){ 
       if(process.env.NODE_ENV == "development") {
         return NextResponse.json(
           {
