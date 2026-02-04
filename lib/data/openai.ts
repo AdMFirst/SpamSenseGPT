@@ -3,45 +3,71 @@ import OpenAI from "openai"
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   baseURL: process.env.OPENAI_API_BASE,
-  defaultHeaders: {
-    "HTTP-Referer": 'https://spam-sense-gpt.vercel.app', // Optional, for including your app on openrouter.ai rankings.
-  }
 });
 
-const systemPrompt = {
-    "command" : 'From 0-100, rate the following message for possibilty of \
-    being a spam message with 100 is spam, and 0 is safe. Send your response \
-    with the provided schema. You must only answer using the provided json schema. \
-    You cannot answer without following the response schema. Use the correct language \
-    when responding',
-    "response_schema":{ 
-        "probability":"int", 
-        "reasoning":"str", 
-    },
-    "language": "id" 
+const systemPrompt = `From 0-100, rate the following message for possibility of being a spam message with 100 being spam, and 0 being safe. Respond with a JSON object containing:
+- "probability": an integer between 0-100
+- "reasoning": a string explaining your reasoning
+
+You must only respond with valid JSON. Do not include any other text.`;
+
+function scaffold(pesan: string): string {
+    return `Please analyze this message for spam: "${pesan}"`;
 }
 
-
-
-
-function scaffold(pesan: string) {
-    return 'help scan this message "'+pesan+'"';
+interface GPTResponse {
+    probability: number;
+    reasoning: string;
 }
 
+export async function createResponse(isiPesan: string): Promise<GPTResponse> {
+    if (!isiPesan || isiPesan.trim().length === 0) {
+        throw new Error("Message cannot be empty");
+    }
 
-export async function createResponse(isiPesan: string) {
-    console.log((new Date()).toISOString()+" - called openai api")
+    const model = process.env.LLM_MODEL_USED || "meta-llama/llama-3.2-3b-instruct:free";
 
-    const chatCompletion = await openai.chat.completions.create({
-        model: process.env.LLM_MODEL_USED?? "meta-llama/llama-3.2-3b-instruct:free",
-        messages: [
-            {role: 'system', content: JSON.stringify(systemPrompt) },
-            {role: "user", content: scaffold(isiPesan) }
-        ],
-    });
+    try {
+        const chatCompletion = await openai.chat.completions.create({
+            model: model,
+            messages: [
+                {role: 'system', content: systemPrompt },
+                {role: "user", content: scaffold(isiPesan) }
+            ],
+            temperature: 0.3,
+            max_tokens: 500,
+        });
 
-    console.log(chatCompletion.choices[0].message.content!)
-    const response = JSON.parse(chatCompletion.choices[0].message.content!);
+        const content = chatCompletion.choices[0]?.message?.content;
+        
+        if (!content) {
+            throw new Error("Empty response from AI service");
+        }
 
-    return response
+        const cleanedContent = content.trim();
+        
+        // Try to extract JSON from the response
+        let jsonMatch = cleanedContent.match(/\{.*\}/s);
+        let jsonString = jsonMatch ? jsonMatch[0] : cleanedContent;
+        
+        const response = JSON.parse(jsonString) as GPTResponse;
+        
+        // Validate the response structure
+        if (typeof response.probability !== 'number' ||
+            typeof response.reasoning !== 'string' ||
+            response.probability < 0 ||
+            response.probability > 100) {
+            throw new Error("Invalid response format from AI service");
+        }
+        
+        return {
+            probability: Math.round(response.probability),
+            reasoning: response.reasoning
+        };
+    } catch (error) {
+        if (error instanceof SyntaxError) {
+            throw new Error("Failed to parse AI response: invalid JSON format");
+        }
+        throw error;
+    }
 }

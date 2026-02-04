@@ -1,8 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter, Roboto } from 'next/font/google'
-import Script from 'next/script'
-import 'tailwindcss/tailwind.css';
+import { Roboto } from 'next/font/google'
 
 import Navbar from '@/lib/components/navbar'
 import Footer from '@/lib/components/footer';

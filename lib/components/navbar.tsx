@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import 'tailwindcss/tailwind.css';
 import { Ysabeau } from "next/font/google"
 
 const fontY = Ysabeau({subsets: ['latin']});

@@ -1,22 +1,56 @@
 "use client"
-import { useState, useEffect, FormEvent, ChangeEvent, useCallback } from 'react';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
 import { GridLoader, BarLoader } from 'react-spinners';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
+interface User {
+    uuid: string;
+    token: number;
+    metadata: {
+        time: string;
+        url: string;
+        ip: string;
+        ua: {
+            browser: { name: string; version: string };
+            os: { name: string; version: string };
+            device: { vendor: string; model: string };
+            engine: { name: string; version: string };
+        };
+        geo: {
+            city?: string;
+            country?: string;
+            countryCode?: string;
+            region?: string;
+            regionCode?: string;
+            isEU?: boolean;
+            latitude?: number;
+            longitude?: number;
+            timezone?: string;
+        } | null;
+    };
+}
 
+interface GPTResponse {
+    probability: number;
+    reasoning: string;
+}
 
- 
+interface ErrorAlert {
+    on: boolean;
+    error: string;
+}
+
 export default function Profile() {
-    const [data, setData] = useState(Object)
+    const [data, setData] = useState<User | null>(null)
     const [isLoading, setLoading] = useState(true)
     const [isPesanLoading, setPesanLoading] = useState(false);
     const [isiBoxPesan, setIsiBoxPesan] = useState('');
-    const [hasilGPT, setHasilGPT] = useState(Object);
-    const [maxLength, setMaxLenght] = useState(500)
-    const [errorAlert, setErrorAlert] = useState({on: false, error: 'looks like something is wrong'})
+    const [hasilGPT, setHasilGPT] = useState<GPTResponse | null>(null);
+    const [maxLength, setMaxLength] = useState(500)
+    const [errorAlert, setErrorAlert] = useState<ErrorAlert>({on: false, error: 'looks like something is wrong'})
 
 
     const setFp = async () => {
@@ -61,9 +95,9 @@ export default function Profile() {
     }
 
     const displayGPTResult = () => {
-        if (hasilGPT !== null){
-            var borderClass = 'border-4 rounded-lg ';
-            var pathColor = 'rgb(107 114 128)'
+        if (hasilGPT){
+            let borderClass = 'border-4 rounded-lg ';
+            let pathColor = 'rgb(107 114 128)'
             if (hasilGPT.probability >= 0 && hasilGPT.probability < 30){
                 borderClass = borderClass + "border-green-500";
                 pathColor = 'rgb(34 197 94)'
@@ -83,9 +117,9 @@ export default function Profile() {
                     </p>
                 </div>
                 <div className='basis-1/4 p-4 xl:max-w-none' style={{maxWidth:"50%"}}>
-                    <CircularProgressbar 
-                        value={hasilGPT.probability} 
-                        text={`${hasilGPT.probability}%`} 
+                    <CircularProgressbar
+                        value={hasilGPT.probability}
+                        text={`${hasilGPT.probability}%`}
                         styles={buildStyles({
                             pathColor: pathColor,
                             textColor: '#000000'
@@ -93,9 +127,8 @@ export default function Profile() {
                     />
                 </div>
             </div>
-        } else {
-            return <></>
         }
+        return null;
     }
 
     const handleChangeBoxPesan = (e:ChangeEvent<HTMLTextAreaElement>) => {
@@ -115,37 +148,33 @@ export default function Profile() {
         }
     }
 
-    const handleSubmit = async (event:FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        setPesanLoading(true)
-        //console.log(event.currentTarget);
-        const formData = new FormData(event.currentTarget)
-        //console.log(formData.get('pesan'))
+        setPesanLoading(true);
+        const formData = new FormData(event.currentTarget);
 
-        fetch("/api/cekpesan", {
-            method: "POST",
-            body: formData
-        })
-        .then(async (response) => {
-            if (!response.ok){
-                throw await response.json()
+        try {
+            const response = await fetch("/api/cekpesan", {
+                method: "POST",
+                body: formData
+            });
+            
+            const jsonBody = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(jsonBody.message || 'Failed to check message');
             }
-            return ( await response.json() )
-        })
-        .then((jsonBody) => {
-            //console.log(jsonBody);
+            
             setHasilGPT(jsonBody.payload);
-            setData(jsonBody.user)
-            setPesanLoading(false)
-        })
-        .catch((error) => {
-            //var errorObject = JSON.parse(error);
+            setData(jsonBody.user);
+            setPesanLoading(false);
+        } catch (error) {
             console.error(error);
-            setPesanLoading(false)
-            setErrorAlert({on:true, error:error.message })
-        })
-        
+            setPesanLoading(false);
+            const err = error as Error;
+            setErrorAlert({on: true, error: err.message || 'An unknown error occurred'});
+        }
     }
 
     useEffect(() => {
@@ -154,14 +183,19 @@ export default function Profile() {
         const localUUID = sessionStorage.getItem("userid");
         
         if (localUUID){
-            sendForm(localUUID)
+            sendForm(localUUID);
         } else {
             setFp()
             .then((id) => {
-                sendForm(id)
+                sendForm(id);
             })
+            .catch((err) => {
+                console.error('Failed to get fingerprint:', err);
+                setErrorAlert({on: true, error: 'Failed to get user fingerprint'});
+                setLoading(false);
+            });
         }
-    }, [])
+    }, []);
  
     if (isLoading) return <div className="h-screen">
         <div className="flex justify-center items-center h-full">

@@ -10,32 +10,35 @@ export async function POST(req: NextRequest){
     const isiPesan = formdata.get("pesan")
     const uuid = formdata.get("uuid");
     if (!isiPesan || !uuid) {
-        return NextResponse.json({ message: 'Validation error', request_body_schema:{
-            pesan: "string", uuid: "string"
-        } }, { status: 422 })
+        return NextResponse.json({
+            message: 'Validation error',
+            request_body_schema: {
+                pesan: "string",
+                uuid: "string"
+            }
+        }, { status: 422 })
     }
-    console.log("isi pesan: "+isiPesan)
 
     try {
-        var user:User = await getUserData(uuid.toString());
+        const user:User = await getUserData(uuid.toString());
         if (user.token < 1 ) {
-            return NextResponse.json({message: 'error, Token tidak cukup, harap isi ulang token'}, {status: 402})
+            return NextResponse.json({message: 'Token limit reached, please replenish your tokens'}, {status: 402})
         }
 
         const response = await createResponse(isiPesan.toString());
         if (response) {
             await reduceToken(user);
-            user = await getUserData(uuid.toString());
+            const updatedUser = await getUserData(uuid.toString());
+            return NextResponse.json({message: 'success', payload: response, user: updatedUser}, {status: 200})
         }
-        return NextResponse.json({message: 'success', payload: response, user: user}, {status: 200})
+        return NextResponse.json({message: 'Failed to analyze message'}, {status: 500})
     } catch (error) {
-        console.log(error);
         if (error instanceof DataNotFoundError) {
-            return NextResponse.json({message: 'error, '+error.message}, {status: 404})   
+            return NextResponse.json({message: error.message}, {status: 404})
         }
         if (error instanceof Error ) {
-            return NextResponse.json({message: 'error, '+error.message}, {status: 500})
+            return NextResponse.json({message: error.message}, {status: 500})
         }
-        return NextResponse.json({message: 'Something went wrong'}, {status: 500})   
+        return NextResponse.json({message: 'Something went wrong'}, {status: 500})
     }
 }

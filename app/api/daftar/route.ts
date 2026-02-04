@@ -10,36 +10,20 @@ export async function POST(request: NextRequest) {
   try{
     const new_user = await addUserData(uuid.toString(), request)
     if (new_user) {
-      return NextResponse.json({message: 'User created succefully', user: new_user}, {status: 201})
+      return NextResponse.json({message: 'User created successfully', user: new_user}, {status: 201})
     } else {
-      return NextResponse.json({message:"User already exist", user: await getUserData(uuid.toString())}, {status: 200})
+      return NextResponse.json({message:"User already exists", user: await getUserData(uuid.toString())}, {status: 200})
     }
   } catch (err) {
-    console.log(err)
-    if( err instanceof Error ){ 
+    if( err instanceof Error ){
       if(process.env.NODE_ENV == "development") {
         return NextResponse.json(
           {
-            message: err.message, 
+            message: err.message,
             request: {
-              ip: request.ip,
-              geo: request.geo,
               url: request.nextUrl,
-              cookies:request.cookies.getAll(),
-              cache: request.cache,
-              credential: request.credentials,
-              destination: request.destination,
-              headers: request.headers,
-              integrity: request.integrity,
-              method: request.method,
-              mode:request.mode,
-              redirect: request.redirect,
-              referrer: request.referrer,
-              referrerPolicy: request.referrerPolicy,
-              signal: request.signal,
             },
-            nextRequest: request as Object
-          }, 
+          },
           {
             status: 500
           }
