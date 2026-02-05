@@ -1,8 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import { Ysabeau } from "next/font/google"
-
-const fontY = Ysabeau({subsets: ['latin']});
 
 const Footer = () => {
     return (
@@ -10,7 +7,7 @@ const Footer = () => {
             <footer className="text-gray-100 body-font md:text-xs">
                 <br />
                 <a className="flex items-center md: justify-center text-gray-100">
-                    <h1 className={"text-2xl "+ fontY.className}> SpamSenseGPT</h1>
+                    <h1 className="text-2xl font-semibold font-display"> SpamSenseGPT</h1>
                 </a>
 
                 <div className="container p-5 mx-auto">

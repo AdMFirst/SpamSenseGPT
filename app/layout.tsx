@@ -1,13 +1,13 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Roboto } from 'next/font/google'
+import { Roboto, Ysabeau } from 'next/font/google'
 
 import Navbar from '@/lib/components/navbar'
 import Footer from '@/lib/components/footer';
 import { Analytics } from '@vercel/analytics/react';
 
-
-const roboto = Roboto({weight:"400", subsets: ['latin']});
+const roboto = Roboto({ weight: '400', subsets: ['latin'], display: 'swap', variable: '--font-roboto' });
+const ysabeau = Ysabeau({ subsets: ['latin'], display: 'swap', variable: '--font-ysabeau' });
 
 export const metadata: Metadata = {
   title: 'SpamSenseGPT',
@@ -20,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className='h-full'>
+    <html lang="en" className={`${roboto.variable} ${ysabeau.variable} h-full`}>
       <head>
         <link rel="manifest" href='/manifest.json'/>
       </head>
-      <body className={roboto.className+" h-full"}>
+      <body className="h-full font-sans">
           <Navbar />
           <main className="flex-1">
             {children}
