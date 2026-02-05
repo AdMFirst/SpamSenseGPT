@@ -1,6 +1,14 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
 
 const Pricing = () => {
+    const [showModal, setShowModal] = useState(false);
+
+    const handleSelectPlan = () => {
+        setShowModal(true);
+    };
+
     return (
         <div className="bg-gray-100 relative">
             <section className="text-gray-600 body-font overflow-hidden">
@@ -24,7 +32,11 @@ const Pricing = () => {
                                         </svg>
                                     </span>5 Token
                                 </p>
-                                <button className="md: justify-center flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">Pilih
+                                <button
+                                    className="md: justify-center flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded"
+                                    onClick={handleSelectPlan}
+                                >
+                                    Pilih
                                 </button>
                             </div>
                         </div>
@@ -42,8 +54,11 @@ const Pricing = () => {
                                         </svg>
                                     </span>10 Token
                                 </p>
-                                <button className="md: justify-center flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">Pilih
-
+                                <button
+                                    className="md: justify-center flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded"
+                                    onClick={handleSelectPlan}
+                                >
+                                    Pilih
                                 </button>
                             </div>
                         </div>
@@ -60,14 +75,62 @@ const Pricing = () => {
                                         </svg>
                                     </span>30 Token
                                 </p>
-                                <button className="md: justify-center flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded">Pilih
-
+                                <button
+                                    className="md: justify-center flex items-center mt-auto text-white bg-indigo-500 border-0 py-2 px-4 w-full focus:outline-none hover:bg-gray-500 rounded"
+                                    onClick={handleSelectPlan}
+                                >
+                                    Pilih
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+            {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+                    <div className="bg-white rounded-lg shadow-2xl w-full max-w-lg p-6 relative">
+                        <button
+                            aria-label="Tutup"
+                            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
+                            onClick={() => setShowModal(false)}
+                        >
+                            x
+                        </button>
+                        <h3 className="text-xl font-semibold text-gray-900 mb-2">Pembayaran Manual</h3>
+                        <p className="text-gray-600 mb-4">
+                            Integrasi payment gateway masih dalam proses. Untuk sementara, lakukan pembayaran manual dan sertakan ID Pengguna kamu agar verifikasi cepat.
+                        </p>
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-5">
+                            <p className="text-sm text-gray-700 font-medium">Cara cepat:</p>
+                            <ol className="list-decimal list-inside text-sm text-gray-600 space-y-1 mt-2">
+                                <li>Buka salah satu tombol dukungan di bawah.</li>
+                                <li>Masukkan nominal sesuai paket yang dipilih.</li>
+                                <li>Tulis "ID Pengguna: &lt;ID Kamu&gt;" di catatan pembayaran.</li>
+                            </ol>
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                            <a
+                                href="https://trakteer.id/AdMFirst/tip"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-center w-full inline-flex justify-center items-center px-4 py-3 rounded-md bg-emerald-500 hover:bg-emerald-600 text-white font-medium"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Buka Trakteer
+                            </a>
+                            <a
+                                href="https://sociabuzz.com/admfirst/tribe"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-center w-full inline-flex justify-center items-center px-4 py-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Buka Sociabuzz
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
