@@ -235,7 +235,7 @@ export default function Profile() {
 
     const renderShell = (body: ReactNode) => (
         <div className="min-h-screen bg-gradient-to-b to-gray-200 from-white">
-            <main className="relative flex flex-col justify-center items-center pb-16">
+            <main className="relative min-h-screen w-full flex flex-col items-center justify-center px-4 py-16">
                 {body}
             </main>
         </div>
@@ -243,7 +243,7 @@ export default function Profile() {
 
     if (pageStatus === 'loading') {
         return renderShell(
-            <div className="flex flex-col items-center justify-center h-screen">
+            <div className="flex flex-col items-center justify-center">
                 <GridLoader size={20} color="#5FCFFF" />
                 <p className="mt-4 text-gray-500">Menyiapkan profil anda...</p>
             </div>
@@ -252,7 +252,7 @@ export default function Profile() {
 
     if (pageStatus === 'error') {
         return renderShell(
-            <div className="flex flex-col items-center justify-center h-screen text-center">
+            <div className="flex flex-col items-center justify-center text-center">
                 <p className="text-lg font-semibold text-red-600">Gagal memuat profil</p>
                 <p className="text-gray-500 mt-2">Silakan muat ulang halaman atau coba lagi.</p>
             </div>
@@ -261,7 +261,7 @@ export default function Profile() {
 
     if (!data) {
         return renderShell(
-            <div className="flex flex-col items-center justify-center h-screen text-center">
+            <div className="flex flex-col items-center justify-center text-center">
                 <p className="text-lg font-semibold text-gray-700">Tidak ada data profil</p>
                 <p className="text-gray-500 mt-2">Mulai dengan mengetik pesan untuk mendeteksi spam.</p>
             </div>
