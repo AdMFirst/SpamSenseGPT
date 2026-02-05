@@ -1,15 +1,6 @@
 'use client';
 
-import type { Metadata } from "next";
 import React, { useState } from "react";
-
-export const metadata: Metadata = {
-    title: 'Harga',
-    description: 'Pilih paket token SpamSenseGPT untuk mendeteksi pesan spam dengan cepat.',
-    alternates: {
-        canonical: '/pricing',
-    },
-};
 
 const Pricing = () => {
     const [showModal, setShowModal] = useState(false);
