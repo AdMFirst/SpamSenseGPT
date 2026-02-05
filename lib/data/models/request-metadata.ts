@@ -1,5 +1,15 @@
 import { NextURL } from "next/dist/server/web/next-url"
 
+export interface ThumbmarkMetadata {
+    thumbmark?: string;
+    visitorId?: string;
+    requestId?: string;
+    confidence?: unknown;
+    components?: unknown;
+    version?: string;
+    raw?: unknown;
+}
+
 export default interface RequestMetadata {
     time: String,
     url: String,
@@ -11,5 +21,6 @@ export default interface RequestMetadata {
         region?: string | undefined; 
         latitude?: string | undefined; 
         longitude?: string | undefined; 
-    } | undefined
+    } | undefined,
+    thumbmark?: ThumbmarkMetadata
 }

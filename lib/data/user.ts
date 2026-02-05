@@ -1,7 +1,7 @@
 import DataNotFoundError from "../exceptions/data-not-found-error";
 import User from "./models/user";
 import { NextRequest, userAgent } from "next/server";
-import RequestMetadata from "./models/request-metadata";
+import RequestMetadata, { ThumbmarkMetadata } from "./models/request-metadata";
 import { Pool } from "pg";
 
 // Create a connection pool with proper configuration
@@ -85,7 +85,7 @@ export async function getUserData(uuid: string): Promise<User> {
     }
 }
 
-export async function addUserData(uuid: string, request: NextRequest): Promise<User> {
+export async function addUserData(uuid: string, request: NextRequest, thumbmarkMetadata?: ThumbmarkMetadata): Promise<User> {
     if (!uuid || uuid.trim().length === 0) {
         throw new Error("Invalid user ID");
     }
@@ -99,7 +99,8 @@ export async function addUserData(uuid: string, request: NextRequest): Promise<U
             request.headers.get('x-real-ip') ||
             null,
         ua: userAgent(request),
-        geo: undefined
+        geo: undefined,
+        thumbmark: thumbmarkMetadata
     };
 
     const newUser: User = {

@@ -4,11 +4,22 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function POST(request: NextRequest) {
   const formdata = await request.formData()
   const uuid = formdata.get("uuid")
+  const thumbmetaRaw = formdata.get("thumbmeta")
+
+  let thumbmeta: any = undefined
+  if (thumbmetaRaw) {
+    try {
+      thumbmeta = JSON.parse(thumbmetaRaw.toString())
+    } catch (e) {
+      thumbmeta = thumbmetaRaw
+    }
+  }
+
   if (!uuid ) {
     return NextResponse.json({ message: 'Validation error' }, { status: 422 })
   }
   try{
-    const new_user = await addUserData(uuid.toString(), request)
+    const new_user = await addUserData(uuid.toString(), request, thumbmeta)
     if (new_user) {
       return NextResponse.json({message: 'User created successfully', user: new_user}, {status: 201})
     } else {
